@@ -1,5 +1,26 @@
+import mongoose from "mongoose";
+import Story from "../models/storyContent.js";
+
 const getStories = async (req, res) => {
-  res.send("instaverse");
+  const story = await Story.find();
+
+  try {
+    res.status(200).json(Story);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+const createStory = async (req, res) => {
+  const body = req.body;
+  const newStory = new Story({
+    ...body,
+  });
+  try {
+    await newStory.save();
+    res.status(201).json(newStory);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
-export { getStories };
+export { getStories, createStory };
